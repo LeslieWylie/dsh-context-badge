@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      # Every declared engine is reported, not just the first one to break.
+      # A half-finished matrix hides which end of the supported range moved.
+      fail-fast: false
+      matrix:
+        # package.json declares `engines: { node: ">=18" }`. Testing only the
+        # newest release would leave that claim unverified while npm keeps
+        # enforcing it on install, so the floor and the current LTS both run.
+        node: [18, 20, 22]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      # No `npm ci` and no cache: this package has zero dependencies and so no
+      # lockfile, and `npm ci` exits non-zero when there is none.
+      - run: npm test
+
+  pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Not a bare `npm pack --dry-run`. That command exits 0 when a `files`
+      # entry resolves to nothing, so as a gate it reports success whether the
+      # package is intact or has quietly stopped shipping its macOS sources.
+      # check-pack.mjs compares the `files` allowlist against the real tarball
+      # listing and fails when an entry ships nothing.
+      - run: node scripts/check-pack.mjs
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The menu-bar app is Swift, and `macos/Sources` is published inside the
+      # npm tarball, so a compile error reaches users who run `npm run
+      # build:macos` after install. The Node jobs above never touch it — this
+      # is the only thing that proves the shipped Swift still builds.
+      - run: swift build -c release
+        working-directory: macos

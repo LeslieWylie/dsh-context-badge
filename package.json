@@ -17,7 +17,7 @@
   "engines": { "node": ">=18" },
   "scripts": {
     "test": "node --test",
-    "pack-check": "npm test && npm pack --dry-run",
+    "pack-check": "npm test && node scripts/check-pack.mjs",
     "build:macos": "cd macos && swift build -c release",
     "run:macos": "./scripts/run-macos.sh",
     "install:macos": "./scripts/install-macos-launch-agent.sh"
