@@ -1,6 +1,6 @@
 {
   "name": "dsh-context-badge",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A local-only context badge with per-session notes and todos for DeepSeek Harness, plus an optional macOS foreground-window companion.",
   "type": "module",
   "main": "./lib/index.js",
@@ -9,7 +9,7 @@
     "./client": { "default": "./lib/client.js" },
     "./package.json": "./package.json"
   },
-  "files": ["lib", "macos/Package.swift", "macos/Sources", "scripts", "tests", "cordis.patch.yml", "README.md", "README.zh-CN.md", "LICENSE"],
+  "files": ["lib", "macos/Package.swift", "macos/Sources", "macos/com.mlamp.dsh-context-badge.plist.template", "scripts", "tests", "cordis.patch.yml", "README.md", "README.zh-CN.md", "LICENSE"],
   "license": "MIT",
   "repository": { "type": "git", "url": "git+https://github.com/LeslieWylie/dsh-context-badge.git" },
   "bugs": { "url": "https://github.com/LeslieWylie/dsh-context-badge/issues" },
@@ -19,7 +19,8 @@
     "test": "node --test",
     "pack-check": "npm test && npm pack --dry-run",
     "build:macos": "cd macos && swift build -c release",
-    "run:macos": "./scripts/run-macos.sh"
+    "run:macos": "./scripts/run-macos.sh",
+    "install:macos": "./scripts/install-macos-launch-agent.sh"
   },
   "dsh": {
     "bundle": { "patch": "./cordis.patch.yml" },

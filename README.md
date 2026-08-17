@@ -5,8 +5,9 @@ Local-first context notes and todos for DeepSeek Harness, with an optional macOS
 ## What it does
 
 - Adds a small context badge to the DSH composer dock.
-- Keeps notes and todos per DSH session in browser `localStorage`.
+- Keeps notes and todos per DSH session or workspace in browser `localStorage`, with automatic v1 migration.
 - Shows the current DSH session, workspace basename, turn/step counts, and token summary when available.
+- Lets you switch between session context and workspace context, see save status, clear completed todos, and review the eight most recently updated contexts.
 - Ships an optional macOS menu-bar / always-on-top companion that tracks only the foreground application and window title.
 - Stores companion data under `~/Library/Application Support/ContextBadge/contexts.json`.
 
@@ -30,7 +31,13 @@ Requires macOS 13+ and Swift 5.9+:
 npm run run:macos
 ```
 
-The first run may require allowing the app to observe window metadata in macOS privacy settings. If a title is unavailable, the badge still works with the foreground application name.
+The first run may require allowing the app to observe window metadata in macOS privacy settings. If a title is unavailable, the badge still works with the foreground application name. The companion keeps the eight most recent foreground contexts and lets you reopen an older context from the panel.
+
+To keep it running after login and relaunch it if it exits:
+
+```sh
+npm run install:macos
+```
 
 ## Design boundary
 

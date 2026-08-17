@@ -32,7 +32,7 @@ test('bundle registers the official DSH loader id', () => {
   assert.equal(captured.id, 'dsh-context-badge')
 })
 
-test('sessionContext derives a stable DSH session/workspace summary', () => {
+test('sessionContext derives stable session and workspace keys', () => {
   const context = __testables.sessionContext({
     sessionId: 's-1',
     session: { sessionId: 's-1' },
@@ -41,7 +41,18 @@ test('sessionContext derives a stable DSH session/workspace summary', () => {
       ? { turns: 2, steps: 4 }
       : { uncachedInputTokens: 1000, outputTokens: 200 },
   })
-  assert.deepEqual(context, { key: 's-1', title: 'Release audit', workspace: 'demo', turns: 2, steps: 4, input: 1000, output: 200 })
+  assert.deepEqual(context, {
+    key: 's-1',
+    sessionKey: 'session:s-1',
+    title: 'Release audit',
+    workspace: 'demo',
+    workspacePath: '/tmp/demo',
+    workspaceKey: 'workspace:/tmp/demo',
+    turns: 2,
+    steps: 4,
+    input: 1000,
+    output: 200,
+  })
 })
 
 test('todo ids and formatting are deterministic enough for local persistence', () => {
@@ -51,4 +62,17 @@ test('todo ids and formatting are deterministic enough for local persistence', (
   assert.match(todo.id, /^[a-z0-9]+$/)
   assert.equal(__testables.fmt(1500), '1.5K')
   assert.equal(__testables.fmt(2_000_000), '2M')
+})
+
+test('normalizeStore migrates v1 session records and preserves v2 records', () => {
+  const migrated = __testables.normalizeStore({ 's-1': { note: 'keep me', todos: [{ id: 'a', text: 'ship', done: true }] } })
+  assert.equal(migrated.records['session:s-1'].note, 'keep me')
+  assert.equal(migrated.records['session:s-1'].todos[0].done, true)
+
+  const current = __testables.normalizeStore({
+    records: { 'workspace:/tmp/demo': { note: 'workspace note' } },
+    recent: [{ key: 'workspace:/tmp/demo', scope: 'workspace', title: 'demo' }],
+  })
+  assert.equal(current.records['workspace:/tmp/demo'].note, 'workspace note')
+  assert.equal(current.recent[0].scope, 'workspace')
 })
