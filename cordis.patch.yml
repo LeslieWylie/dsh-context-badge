@@ -1,0 +1,4 @@
+# Mount the local-only context badge in the DSH web client.
+- insert:
+    - id: dsh-context-badge
+      name: 'dsh-context-badge'

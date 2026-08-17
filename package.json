@@ -1,0 +1,38 @@
+{
+  "name": "dsh-context-badge",
+  "version": "0.1.0",
+  "description": "A local-only context badge with per-session notes and todos for DeepSeek Harness, plus an optional macOS foreground-window companion.",
+  "type": "module",
+  "main": "./lib/index.js",
+  "exports": {
+    ".": { "default": "./lib/index.js" },
+    "./client": { "default": "./lib/client.js" },
+    "./package.json": "./package.json"
+  },
+  "files": ["lib", "macos/Package.swift", "macos/Sources", "scripts", "tests", "cordis.patch.yml", "README.md", "README.zh-CN.md", "LICENSE"],
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/LeslieWylie/dsh-context-badge.git" },
+  "bugs": { "url": "https://github.com/LeslieWylie/dsh-context-badge/issues" },
+  "homepage": "https://github.com/LeslieWylie/dsh-context-badge#readme",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "test": "node --test",
+    "pack-check": "npm test && npm pack --dry-run",
+    "build:macos": "cd macos && swift build -c release",
+    "run:macos": "./scripts/run-macos.sh"
+  },
+  "dsh": {
+    "bundle": { "patch": "./cordis.patch.yml" },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-locale"
+      ]
+    }
+  },
+  "peerDependencies": { "react": "^18.2.0" },
+  "peerDependenciesMeta": { "react": { "optional": true } },
+  "keywords": ["dsh-plugin", "deepseek-harness", "context", "notes", "todos", "macos", "local-only"]
+}
