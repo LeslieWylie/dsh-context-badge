@@ -76,3 +76,18 @@ test('normalizeStore migrates v1 session records and preserves v2 records', () =
   assert.equal(current.records['workspace:/tmp/demo'].note, 'workspace note')
   assert.equal(current.recent[0].scope, 'workspace')
 })
+
+test('firstUserMessages keeps the first five user/steering messages and extracts text blocks', () => {
+  const nodes = Array.from({ length: 7 }, (_, index) => ({
+    kind: index === 2 ? 'steering' : 'user',
+    seq: index + 1,
+    time: index + 100,
+    content: [{ type: 'text', text: ` message ${index + 1} ` }],
+  }))
+  const messages = __testables.firstUserMessages(nodes)
+  assert.equal(messages.length, 5)
+  assert.deepEqual(messages.map((message) => message.text), [
+    'message 1', 'message 2', 'message 3', 'message 4', 'message 5',
+  ])
+  assert.equal(__testables.derivePurpose(messages, 'demo'), '围绕「message 1」推进')
+})

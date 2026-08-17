@@ -1,7 +1,7 @@
 {
   "name": "dsh-context-badge",
-  "version": "0.2.0",
-  "description": "A local-only context badge with per-session notes and todos for DeepSeek Harness, plus an optional macOS foreground-window companion.",
+  "version": "0.3.0",
+  "description": "A local-only context badge with automatic first-five user-message capture, purpose summary, per-session notes and todos for DeepSeek Harness, plus an optional macOS foreground-window companion.",
   "type": "module",
   "main": "./lib/index.js",
   "exports": {

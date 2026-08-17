@@ -8,6 +8,7 @@ Local-first context notes and todos for DeepSeek Harness, with an optional macOS
 - Keeps notes and todos per DSH session or workspace in browser `localStorage`, with automatic v1 migration.
 - Shows the current DSH session, workspace basename, turn/step counts, and token summary when available.
 - Lets you switch between session context and workspace context, see save status, clear completed todos, and review the eight most recently updated contexts.
+- Automatically keeps the first five loaded user/steering messages for each session and derives a local purpose line from the first message; no model call or remote sync is involved.
 - Ships an optional macOS menu-bar / always-on-top companion that tracks only the foreground application and window title.
 - Stores companion data under `~/Library/Application Support/ContextBadge/contexts.json`.
 
